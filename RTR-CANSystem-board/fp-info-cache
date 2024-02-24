@@ -1,4 +1,11 @@
-24006479292536979
+24016731741392407
+01.RTR-CANSystem-board_library
+C_0603_1608Metric_Pad1.08x0.95mm_HandSolder
+Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+capacitor handsolder
+0
+2
+2
 01.RTR-CANSystem-board_library
 DIP-8_W7.62mm
 http://media.digikey.com/pdf/Data%20Sheets/Lite-On%20PDFs/6N137%20Series.pdf
@@ -21,6 +28,27 @@ HRS_ZX62-B-5PA_33_
 11
 11
 01.RTR-CANSystem-board_library
+PinHeader_1x07_P2.54mm_Vertical
+Through hole straight pin header, 1x07, 2.54mm pitch, single row
+Through hole pin header THT 1x07 2.54mm single row
+0
+7
+7
+01.RTR-CANSystem-board_library
+R_0805_2012Metric
+Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
+resistor
+0
+2
+2
+01.RTR-CANSystem-board_library
+R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal
+Resistor, Axial_DIN0204 series, Axial, Horizontal, pin pitch=7.62mm, 0.167W, length*diameter=3.6*1.6mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf
+Resistor Axial_DIN0204 series Axial Horizontal pin pitch 7.62mm 0.167W length 3.6mm diameter 1.6mm
+0
+2
+2
+01.RTR-CANSystem-board_library
 SW_Push_1P1T_NO_CK_KSC7xxJ
 CK components KSC7 tactile switch https://www.ckswitches.com/media/1973/ksc7.pdf
 tactile switch ksc7
@@ -41,6 +69,13 @@ USB-A
 0
 6
 5
+01.RTR-CANSystem-board_library
+usb-PCB
+
+
+0
+4
+4
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -98874,3 +98909,10 @@ NELTRON_5077CR-16SMC2-BK-TR
 0
 16
 16
+user-plugin
+usb-PCB
+
+
+0
+4
+4
