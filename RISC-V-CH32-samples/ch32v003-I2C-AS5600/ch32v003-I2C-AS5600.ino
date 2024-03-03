@@ -1,24 +1,39 @@
 #include <Wire.h>
-#define AS5600_addr 0x36
+const int AS5600_addr = 0x36;
 
 // Function Prototype Declaration
-byte read_AS5600(byte);
-void write_AS5600(byte, byte);
 
-void setup()
-{
+byte read_AS5600(byte addr) {
+  Wire.beginTransmission(AS5600_addr);
+  Wire.write(addr);
+  Wire.endTransmission(false);
+  Wire.requestFrom(AS5600_addr, 1, true);
+  byte data = Wire.read();
+  return data;
+}
+
+void write_AS5600(byte addr, byte data) {
+  Wire.beginTransmission(AS5600_addr);
+  Wire.write(addr);  // addressing
+  Wire.write(data);  // write data
+  Wire.endTransmission();
+}
+
+void setup() {
+  //Wire.setSDA(PC1);
+  //Wire.setSCL(PC2);
   Wire.begin();
-  Serial.begin(115200);
-
-  pinMode(PD4, OUTPUT);
-  digitalWrite(PD4, LOW);
-  while (!Serial)
-  {
-    delay(1);
-  }
-  digitalWrite(PD4, HIGH);
+  Wire.beginTransmission(AS5600_addr);
+  Wire.write(0x00);
+  Wire.endTransmission();
 
   delay(1000);
+
+  Serial.begin(19200);
+
+  pinMode(PD4, OUTPUT);
+
+
   byte offSetAngle1 = read_AS5600(0x0C);
   byte offSetAngle2 = read_AS5600(0x0D);
 
@@ -26,8 +41,10 @@ void setup()
   write_AS5600(0x02, offSetAngle2);
 }
 
-void loop()
-{
+void loop() {
+  digitalWrite(PD4, LOW);
+  delay(200);
+
   // check status
   byte AS5600Status = read_AS5600(0x0B);
   AS5600Status = AS5600Status & 0B00111000;
@@ -68,24 +85,9 @@ void loop()
   Serial.write(mpos);
   Serial.write("\n");
   Serial.write("-----------------");
-
-  delay(20);
+  Serial.write("\n");
+  digitalWrite(PD4, HIGH);
+  delay(200);
 }
 
-byte read_AS5600(byte addr)
-{
-  Wire.beginTransmission(AS5600_addr);
-  Wire.write(addr);
-  Wire.endTransmission(false);
-  Wire.requestFrom(AS5600_addr, 1, true);
-  byte data = Wire.read();
-  return data;
-}
 
-void write_AS5600(byte addr, byte data)
-{
-  Wire.beginTransmission(AS5600_addr);
-  Wire.write(addr); // addressing
-  Wire.write(data); // write data
-  Wire.endTransmission();
-}

@@ -14,12 +14,14 @@ byte DotB1[8]={
   
 void setup(){
   Wire.begin();
+  Serial.begin(19200);
   setup_i2c();
   Display_Black();
 }
   
 void loop(){
   Display_Picture();
+  Serial.write("next\n");
 }
  
 void setup_i2c(){
