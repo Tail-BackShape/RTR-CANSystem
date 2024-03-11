@@ -1,7 +1,6 @@
 #include <Wire.h>
 #define AS5600_addr 0x36
 
-
 // Function Prototype Declaration
 byte read_AS5600(byte);
 void write_AS5600(byte, byte);
@@ -51,26 +50,26 @@ void loop()
   uint16_t mpos2 = read_AS5600(0x04);
   uint16_t mpos = ((0x0F & mpos1) << 8) | mpos2;
 
-  Serial.print("Status:");
-  Serial.print(AS5600Status);
-  Serial.print("\n");
+  // Serial.print("Status:");
+  // Serial.print(AS5600Status);
+  // Serial.print("\n");
 
-  Serial.print("RAWAngel:");
-  Serial.print(rawAngle);
-  Serial.print("\n");
+  // Serial.print("RAWAngel:");
+  // Serial.print(rawAngle);
+  // Serial.print("\n");
 
-  Serial.print("Angle:");
-  Serial.print(angle);
-  Serial.print("\n");
+  // Serial.print("Angle:");
+  Serial.println(angle); // only print angle
+  // Serial.print("\n");
 
-  Serial.print("ZPOS:");
-  Serial.print(zpos);
-  Serial.print("\n");
+  // Serial.print("ZPOS:");
+  // Serial.print(zpos);
+  // Serial.print("\n");
 
-  Serial.print("MPOS:");
-  Serial.print(mpos);
-  Serial.print("-----------------");
-  Serial.print("\n");
+  // Serial.print("MPOS:");
+  // Serial.print(mpos);
+  // Serial.print("-----------------");
+  // Serial.print("\n");
 
   Ltika();
 
