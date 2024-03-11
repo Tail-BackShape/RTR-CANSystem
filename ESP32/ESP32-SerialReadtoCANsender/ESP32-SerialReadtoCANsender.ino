@@ -1,12 +1,12 @@
 #include <CAN.h>
 
-const int LED = 18; // LED pin
-int count = 0;      // counter
-int Mgdeg = 0;      // Magnetic degree
+volatile int Mgdeg = 0; // Magnetic degree
+const int LED = 18;     // LED pin
+int count = 0;          // counter
 
-void twinkle();      // LEDを点滅させる
-void serialEvent2(); // シリアル2の受信割り込み
-void CANsend();      // CAN送信
+void twinkle();       // LEDを点滅させる
+void serialEvent2();  // シリアル2の受信割り込み
+void CANsender(byte); // CAN送信
 
 void setup()
 {
@@ -33,6 +33,10 @@ void setup()
 
 void loop()
 {
+  CANsender(Mgdeg);
+  twinkle();
+  count++;
+  delay(100);
 }
 
 void twinkle()
@@ -60,14 +64,20 @@ void serialEvent2()
     // 受信したデータを出力
     Serial.print("Receive:");
     Serial.println(data);
+
+    Mgdeg = data.toInt();
   }
 }
 
-void CANsend()
+void CANsender(byte data)
 {
+  byte prime8bit = data >> 8;    // 16bitの上位8bit
+  byte latter8bit = data & 0x0F; // 16bitの下位8bit
+
   Serial.println("Sending packet ... ");
 
   CAN.beginPacket(0x0F);
-  CAN.write('h');
+  CAN.write(prime8bit);
+  CAN.write(latter8bit);
   CAN.endPacket();
 }
