@@ -73,6 +73,10 @@ void CANsender(byte data)
 {
   byte prime8bit = data >> 8;    // 16bitの上位8bit
   byte latter8bit = data & 0x0F; // 16bitの下位8bit
+  Serial.print("prime8bit: ");
+  Serial.println(prime8bit, HEX);
+  Serial.print("latter8bit: ");
+  Serial.println(latter8bit, HEX);
 
   Serial.println("Sending packet ... ");
 
