@@ -4,6 +4,9 @@
 #include <Wire.h>
 #define AS5600_addr 0x36
 
+// counter for LED
+int count = 0;
+
 // Function Prototype Declaration
 byte read_AS5600(byte);
 void write_AS5600(byte, byte);
@@ -99,7 +102,7 @@ void write_AS5600(byte addr, byte data)
 
 void Ltika()
 {
-  static int count = 0;
+
   if ((count % 2) == 1)
   {
     digitalWrite(PD4, HIGH);

@@ -17,7 +17,7 @@ void setup()
 {
   // setup serial
   Serial.begin(115200);
-  Serial2.begin(115200);
+  Serial2.begin(9600);
   while (!Serial)
   {
     delay(10);
