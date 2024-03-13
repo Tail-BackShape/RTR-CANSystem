@@ -13,7 +13,7 @@ void setup()
   pinMode(PD4, OUTPUT);
 
   Wire.begin();
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (!Serial)
   {
     delay(1);
@@ -76,7 +76,7 @@ void loop()
 
   Ltika();
 
-  delay(20);
+  delay(100);
 }
 
 byte read_AS5600(byte addr)
@@ -99,7 +99,13 @@ void write_AS5600(byte addr, byte data)
 
 void Ltika()
 {
-  digitalWrite(PD4, HIGH);
-  delay(80);
-  digitalWrite(PD4, LOW);
+  static int count = 0;
+  if ((count % 2) == 1)
+  {
+    digitalWrite(PD4, HIGH);
+  }
+  else
+  {
+    digitalWrite(PD4, LOW);
+  }
 }

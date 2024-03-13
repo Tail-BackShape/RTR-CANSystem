@@ -3,7 +3,7 @@
 
 #include <CAN.h>
 
-byte sendDegAddr = 0x0F; // send degree
+byte sendDegAddr = 0x0F; // send degree address
 
 volatile int Mgdeg = 0; // Magnetic degree
 const int LED = 18;     // LED pin
@@ -27,7 +27,7 @@ void setup()
   pinMode(LED, OUTPUT);
 
   // setup CAN
-  if (!CAN.begin(1000E3))
+  if (!CAN.begin(500E3))
   {
     Serial.println("Starting CAN failed!");
     while (1)
