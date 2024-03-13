@@ -3,23 +3,20 @@
 
 #include <CAN.h>
 
-byte sendDegAddr = 0x0F; // send degree address
+byte sendDegAddr = 0x0F;  // send degree address
 
-volatile int Mgdeg = 0; // Magnetic degree
-const int LED = 18;     // LED pin
-int count = 0;          // counter
+volatile int Mgdeg = 0;  // Magnetic degree
+const int LED = 18;      // LED pin
 
-void twinkle();       // LEDを点滅させる
-void serialEvent2();  // シリアル2の受信割り込み
-void CANsender(byte); // CAN送信
+void twinkle();        // LEDを点滅させる
+void serialEvent2();   // シリアル2の受信割り込み
+void CANsender(byte);  // CAN送信
 
-void setup()
-{
+void setup() {
   // setup serial
-  Serial.begin(115200);
-  Serial2.begin(9600);
-  while (!Serial)
-  {
+  Serial.begin(9600);
+  Serial2.begin(9600);//Serial2 tx=io17, rx=io16
+  while (!Serial) {
     delay(10);
   }
 
@@ -27,8 +24,7 @@ void setup()
   pinMode(LED, OUTPUT);
 
   // setup CAN
-  if (!CAN.begin(500E3))
-  {
+  if (!CAN.begin(500E3)) {
     Serial.println("Starting CAN failed!");
     while (1)
       ;
@@ -36,33 +32,27 @@ void setup()
   Serial.println("CAN Sender started");
 }
 
-void loop()
-{
-  CANsender(Mgdeg);
+void loop() {
+  //CANsender(Mgdeg);
   twinkle();
-  count++;
-  delay(100);
+  delay(1000);
 }
 
-void twinkle()
-{
-  if ((count % 2) == 1)
-  {
+void twinkle() {
+  static int count = 0;  // counter
+  if ((count % 2) == 1) {
     digitalWrite(LED, HIGH);
-  }
-  else
-  {
+  } else {
     digitalWrite(LED, LOW);
   }
   Serial.print("count = ");
   Serial.print(count);
   Serial.print("\n");
+  count++;
 }
 
-void serialEvent2()
-{
-  if (Serial2.available() > 0)
-  {
+void serialEvent2() {
+  if (Serial2.available() > 0) {
     // シリアルデータの受信 (改行まで)
     String data = Serial2.readStringUntil('\n');
 
@@ -74,10 +64,9 @@ void serialEvent2()
   }
 }
 
-void CANsender(byte data)
-{
-  byte prime8bit = data >> 8;    // 16bitの上位8bit
-  byte latter8bit = data & 0x0F; // 16bitの下位8bit
+void CANsender(byte data) {
+  byte prime8bit = data >> 8;     // 16bitの上位8bit
+  byte latter8bit = data & 0x0F;  // 16bitの下位8bit
   Serial.print("prime8bit: ");
   Serial.println(prime8bit, HEX);
   Serial.print("latter8bit: ");
