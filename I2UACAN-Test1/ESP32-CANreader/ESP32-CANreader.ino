@@ -25,12 +25,12 @@ void setup()
 
 void loop()
 {
-  // scan packet size
+  // try to parse packet
   int packetSize = CAN.parsePacket();
 
-  if (packetsize || CAN.packetId() != -1)
+  if (packetSize || CAN.packetId() != -1)
   {
-    // resive packet
+    // received a packet
     Serial.print("Received ");
 
     if (CAN.packetExtended())
@@ -49,7 +49,7 @@ void loop()
 
     if (CAN.packetRtr())
     {
-      Serial.print((" and requested length "));
+      Serial.print(" and requested length ");
       Serial.println(CAN.packetDlc());
     }
     else
@@ -57,11 +57,14 @@ void loop()
       Serial.print(" and length ");
       Serial.println(packetSize);
 
+      // only print packet data for non-RTR packets
       while (CAN.available())
       {
         Serial.print((char)CAN.read());
       }
       Serial.println();
     }
+
+    Serial.println();
   }
 }

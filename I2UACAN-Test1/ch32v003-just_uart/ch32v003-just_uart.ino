@@ -19,18 +19,29 @@ void setup()
 
 void loop()
 {
-  static int count = 0;
-  Serial.println(count);
-  count++;
-
-  if (count % 2 == 0)
+  static int count = 1; // counter until 1byte
+  if (count < 255)
   {
-    digitalWrite(LEDpin, HIGH);
+    count++;
   }
   else
   {
-    digitalWrite(LEDpin, LOW);
+    count = 1;
   }
 
-  delay(500);
+  // serial send
+  //Serial.write("H"); // header
+  Serial.write(lowByte(count));
+
+  delay(200);
+  /*
+    if (count % 2 == 0)
+    {
+      digitalWrite(LEDpin, HIGH);
+    }
+    else
+    {
+      digitalWrite(LEDpin, LOW);
+    }
+  */
 }
