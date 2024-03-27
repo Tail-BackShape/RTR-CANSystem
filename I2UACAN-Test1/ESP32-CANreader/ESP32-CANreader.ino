@@ -1,45 +1,34 @@
-// read degree from CAN BUS
-// and send it to Serial.print
+// Copyright (c) Sandeep Mistry. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 #include <CAN.h>
 
-// byte sendDegAddr = 0x0F; // send degree address
-
-void setup()
-{
+void setup() {
   Serial.begin(115200);
-  while (!Serial)
-  {
-    delay(1);
-  }
+  while (!Serial);
+
   Serial.println("CAN Receiver");
 
   // start the CAN bus at 500 kbps
-  if (!CAN.begin(500E3))
-  {
+  if (!CAN.begin(500E3)) {
     Serial.println("Starting CAN failed!");
-    while (1)
-      ;
+    while (1);
   }
 }
 
-void loop()
-{
+void loop() {
   // try to parse packet
   int packetSize = CAN.parsePacket();
 
-  if (packetSize || CAN.packetId() != -1)
-  {
+  if (packetSize) {
     // received a packet
     Serial.print("Received ");
 
-    if (CAN.packetExtended())
-    {
+    if (CAN.packetExtended()) {
       Serial.print("extended ");
     }
 
-    if (CAN.packetRtr())
-    {
+    if (CAN.packetRtr()) {
       // Remote transmission request, packet contains no data
       Serial.print("RTR ");
     }
@@ -47,20 +36,16 @@ void loop()
     Serial.print("packet with id 0x");
     Serial.print(CAN.packetId(), HEX);
 
-    if (CAN.packetRtr())
-    {
+    if (CAN.packetRtr()) {
       Serial.print(" and requested length ");
       Serial.println(CAN.packetDlc());
-    }
-    else
-    {
+    } else {
       Serial.print(" and length ");
       Serial.println(packetSize);
 
       // only print packet data for non-RTR packets
-      while (CAN.available())
-      {
-        Serial.print((char)CAN.read());
+      while (CAN.available()) {
+        Serial.print(CAN.read());
       }
       Serial.println();
     }
@@ -68,3 +53,4 @@ void loop()
     Serial.println();
   }
 }
+

@@ -19,7 +19,7 @@ void setup()
 
 void loop()
 {
-  static int count = 1; // counter until 1byte
+  static uint8_t count = 1; // counter until 1byte
   if (count < 255)
   {
     count++;
@@ -30,7 +30,7 @@ void loop()
   }
 
   // serial send
-  //Serial.write("H"); // header
+  // Serial.write("H"); // header
   Serial.write(lowByte(count));
 
   delay(200);

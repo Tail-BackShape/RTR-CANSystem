@@ -3,26 +3,20 @@
 
 #include <CAN.h>
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
-  // while (!Serial);
-
-  delay(2000);
+  while (!Serial);
 
   Serial.println("CAN Sender");
 
   // start the CAN bus at 500 kbps
-  if (!CAN.begin(500E3))
-  {
+  if (!CAN.begin(500E3)) {
     Serial.println("Starting CAN failed!");
-    while (1)
-      ;
+    while (1);
   }
 }
 
-void loop()
-{
+void loop() {
   // send packet: id is 11 bits, packet can contain up to 8 bytes of data
   Serial.print("Sending packet ... ");
 
@@ -53,3 +47,4 @@ void loop()
 
   delay(1000);
 }
+

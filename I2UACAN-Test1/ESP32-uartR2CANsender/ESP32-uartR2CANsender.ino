@@ -1,80 +1,57 @@
-// read degree from UART-CH32V
-// and send it to CAN
+// Copyright (c) Sandeep Mistry. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 #include <CAN.h>
 
+uint8_t serVal = 0;
 byte CANAddr = 0x12; // CANアドレス
 
-volatile int Uart2Data = 0; // uart2で受信したデータの格納
-const int LED = 18;         // LED pin
-
-void twinkle();      // LEDを点滅させる関数
-void serialEvent2(); // シリアル2の受信割り込み関数
-void CANsender();    // CAN送信関数
+void serRead(); // シリアル読み取り関数
 
 void setup()
 {
-  // setup serial
-  Serial.begin(9600);
-  Serial2.begin(9600); // Serial2 tx=io17, rx=io16
+  Serial.begin(115200);
   while (!Serial)
-  {
-    delay(10);
-  }
+    ;
+  Serial2.begin(9600); // Serial2 tx=io17, rx=io16
+  while (!Serial2)
+    ;
 
-  // setup LED for checking
-  pinMode(LED, OUTPUT);
+  Serial.println("CAN Sender");
 
-  // setup CAN
+  // start the CAN bus at 500 kbps
   if (!CAN.begin(500E3))
   {
     Serial.println("Starting CAN failed!");
     while (1)
       ;
   }
-  Serial.println("CAN Sender started");
 }
 
 void loop()
 {
-  // CANsender();
-  // twinkle();
-  // delay(1000);
-}
-
-void twinkle()
-{
-  static int count = 0; // counter
-  if ((count % 2) == 1)
-  {
-    digitalWrite(LED, HIGH);
-  }
-  else
-  {
-    digitalWrite(LED, LOW);
-  }
-  Serial.print("count = ");
-  Serial.print(count);
-  Serial.print("\n");
-  count++;
-}
-
-void serialEvent2()
-{
-  if (Serial2.available() > 0)
-  {
-    Uart2Data = Serial2.read(); // 下位バイトの読み取り
-    Serial.println(Uart2Data);
-  }
-}
-
-void CANsender()
-{
-  Serial.println("Sending packet ... ");
+  serRead();
+  
+  // send packet: id is 11 bits, packet can contain up to 8 bytes of data
+  Serial.print("Sending packet ... ");
 
   CAN.beginPacket(CANAddr);
-  CAN.write(Uart2Data);
+  
+  CAN.write(serVal);
+
   CAN.endPacket();
 
   Serial.println("done");
+
+  delay(1000);
+}
+
+void serRead()
+{
+  if (Serial2.available() > 0)
+  {
+    serVal = Serial2.read();
+    Serial.print("serVal = ");
+    Serial.println(serVal);
+  }
 }
