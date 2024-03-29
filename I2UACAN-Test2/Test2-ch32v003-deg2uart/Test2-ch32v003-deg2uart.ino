@@ -5,12 +5,12 @@
 byte read_AS5600(byte);
 void write_AS5600(byte, byte);
 
-void setup()
-{
+void setup() {
+  pinMode(PD4, OUTPUT);
+
   Wire.begin();
-  Serial.begin(115200);
-  while (!Serial)
-  {
+  Serial.begin(9600);
+  while (!Serial) {
     delay(1);
   }
 
@@ -22,8 +22,7 @@ void setup()
   write_AS5600(0x02, offSetAngle2);
 }
 
-void loop()
-{
+void loop() {
   // check status
   byte AS5600Status = read_AS5600(0x0B);
   AS5600Status = AS5600Status & 0B00111000;
@@ -32,17 +31,15 @@ void loop()
   uint16_t angle1 = read_AS5600(0x0E);
   uint16_t angle2 = read_AS5600(0x0F);
   uint16_t angle = ((0x0F & angle1) << 8) | angle2;
-  float angledeg = angle * (360.0 / 4096.0);
 
-  Serial.print("AngleDeg:");
-  Serial.println(angledeg);
-  Serial.println("-----------------");
+  Serial.println(AS5600Status);
+
+  Serial.println(angle);  // only print angle
 
   delay(20);
 }
 
-byte read_AS5600(byte addr)
-{
+byte read_AS5600(byte addr) {
   Wire.beginTransmission(AS5600_addr);
   Wire.write(addr);
   Wire.endTransmission(false);
@@ -51,10 +48,9 @@ byte read_AS5600(byte addr)
   return data;
 }
 
-void write_AS5600(byte addr, byte data)
-{
+void write_AS5600(byte addr, byte data) {
   Wire.beginTransmission(AS5600_addr);
-  Wire.write(addr); // addressing
-  Wire.write(data); // write data
+  Wire.write(addr);  // addressing
+  Wire.write(data);  // write data
   Wire.endTransmission();
 }
