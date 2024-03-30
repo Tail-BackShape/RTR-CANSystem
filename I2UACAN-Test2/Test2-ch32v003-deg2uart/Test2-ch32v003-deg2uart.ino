@@ -32,9 +32,19 @@ void loop() {
   uint16_t angle2 = read_AS5600(0x0F);
   uint16_t angle = ((0x0F & angle1) << 8) | angle2;
 
+  uint8_t sndAngLow = lowByte(angle);
+  uint8_t sndAngHigh = highByte(angle);
+
+  Serial.print("AS5600Status: ");
   Serial.println(AS5600Status);
 
+  Serial.print("angle: ");
   Serial.println(angle);  // only print angle
+
+  Serial.print("sndAngLow: ");
+  Serial.print(sndAngLow);
+  Serial.print("\tsndAngHigh: ");
+  Serial.println(sndAngHigh);
 
   delay(20);
 }
