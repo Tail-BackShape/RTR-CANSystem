@@ -5,12 +5,14 @@
 byte read_AS5600(byte);
 void write_AS5600(byte, byte);
 
-void setup() {
+void setup()
+{
   pinMode(PD4, OUTPUT);
 
   Wire.begin();
   Serial.begin(9600);
-  while (!Serial) {
+  while (!Serial)
+  {
     delay(1);
   }
 
@@ -22,34 +24,39 @@ void setup() {
   write_AS5600(0x02, offSetAngle2);
 }
 
-void loop() {
+void loop()
+{
   // check status
   byte AS5600Status = read_AS5600(0x0B);
   AS5600Status = AS5600Status & 0B00111000;
 
   // read angle
-  uint16_t angle1 = read_AS5600(0x0E);
-  uint16_t angle2 = read_AS5600(0x0F);
-  uint16_t angle = ((0x0F & angle1) << 8) | angle2;
+  byte angle1 = read_AS5600(0x0E);
+  byte angle2 = read_AS5600(0x0F);
+  // uint16_t angle = ((0x0F & angle1) << 8) | angle2;
 
-  uint8_t sndAngLow = lowByte(angle);
-  uint8_t sndAngHigh = highByte(angle);
+  // uint8_t sndAngLow = lowByte(angle);
+  // uint8_t sndAngHigh = highByte(angle);
 
-  Serial.print("AS5600Status: ");
-  Serial.println(AS5600Status);
+  Serial.write(255); // header1の送信
+  Serial.write(255); // header2の送信
 
-  Serial.print("angle: ");
-  Serial.println(angle);  // only print angle
+  // Serial.print("AS5600Status: ");
+  Serial.write(AS5600Status);
 
-  Serial.print("sndAngLow: ");
-  Serial.print(sndAngLow);
-  Serial.print("\tsndAngHigh: ");
-  Serial.println(sndAngHigh);
+  // Serial.print("angle: ");
+  //  Serial.println(angle);  // only print angle
 
-  delay(20);
+  // Serial.print("sndAngLow: ");
+  Serial.write(angle1);
+  // Serial.print("\tsndAngHigh: ");
+  Serial.write(angle2);
+
+  delay(100);
 }
 
-byte read_AS5600(byte addr) {
+byte read_AS5600(byte addr)
+{
   Wire.beginTransmission(AS5600_addr);
   Wire.write(addr);
   Wire.endTransmission(false);
@@ -58,9 +65,10 @@ byte read_AS5600(byte addr) {
   return data;
 }
 
-void write_AS5600(byte addr, byte data) {
+void write_AS5600(byte addr, byte data)
+{
   Wire.beginTransmission(AS5600_addr);
-  Wire.write(addr);  // addressing
-  Wire.write(data);  // write data
+  Wire.write(addr); // addressing
+  Wire.write(data); // write data
   Wire.endTransmission();
 }
