@@ -4,45 +4,28 @@
 
 #include <Wire.h>
 
-const int LEDpin = PD4; // LED pin1
-
-void setup()
-{
+void setup() {
   Serial.begin(9600);
-  while (!Serial)
-  {
+  while (!Serial) {
     delay(1);
   }
   delay(1000);
   Serial.println("ch32v003-just_uart");
 }
 
-void loop()
-{
-  static uint8_t count = 1; // counter until 1byte
-  if (count < 255)
-  {
+void loop() {
+  /*
+  static uint8_t count = 1;  // counter until 1byte
+  if (count < 255) {
     count++;
-  }
-  else
-  {
+  } else {
     count = 1;
   }
+  */
 
   // serial send
   // Serial.write("H"); // header
-  Serial.write(lowByte(count));
-  Serial.write(lowByte(count));
+  Serial.println(4033);
 
-  delay(200);
-  /*
-    if (count % 2 == 0)
-    {
-      digitalWrite(LEDpin, HIGH);
-    }
-    else
-    {
-      digitalWrite(LEDpin, LOW);
-    }
-  */
+  delay(100);
 }
