@@ -1,9 +1,64 @@
-void setup() {
-  // put your setup code here, to run once:
+// read degree from UART-CH32V
+// and send it to CAN
 
+#include <CAN.h>
+
+void setup()
+{
+  // setup serial
+  Serial.begin(9600);
+  Serial2.begin(9600); // for read ch32v uart.tx=io17,rx=io16
+  while (!Serial)
+  {
+    delay(10);
+  }
+
+  // setup CAN
+  if (!CAN.begin(500E3))
+  { // start the CAN bus at 500 kbps
+    Serial.println("Starting CAN failed!");
+    while (1)
+      ;
+  }
+  Serial.println("CAN Sender started");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+  int Uart2Data = 0, angle = 0, status = 0;                                           // AS5600 data.
+  byte statusByte = 0, angleHighByte = 0, angleLowByte = 0; // for CAN data.
 
+  if (Serial2.available() > 0)
+  {
+    // read data from CH32V
+    Uart2Data = Serial2.parseInt();
+    status = Uart2Data % 100;
+    angle = (Uart2Data - status) / 100;
+
+    // change data to byte
+    statusByte = lowByte(status);
+    angleHighByte = highByte(angle);
+    angleLowByte = lowByte(angle);
+
+    // Serial.println(Uart2Data);
+    Serial.print("Uart2Data : ");
+    Serial.println(Uart2Data);
+    Serial.print("status: ");
+    Serial.println(status);
+    Serial.print("angle: ");
+    Serial.println(angle);
+    Serial.print("statusByte: ");
+    Serial.println(statusByte);
+    Serial.print("angleHighByte: ");
+    Serial.println(angleHighByte);
+    Serial.print("angleLowByte: ");
+    Serial.println(angleLowByte);
+  }
+
+  /*
+  Serial.println("Sending CAN packet ... ");
+
+  CAN.beginPacket(0x12);
+  CAN.write(status);
+*/
 }
