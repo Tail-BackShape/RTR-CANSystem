@@ -1,0 +1,2 @@
+CH32V003F4P6 reads data from AS5600 (magnetic encoder) and sends status and angle to ESP32.
+The ESP32 at the receiving end displays the status and angle separately.
