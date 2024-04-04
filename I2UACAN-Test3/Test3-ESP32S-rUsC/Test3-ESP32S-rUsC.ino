@@ -5,6 +5,8 @@
 
 void setup()
 {
+
+  delay(2000);
   // setup serial
   Serial.begin(9600);
   Serial2.begin(9600); // for read ch32v uart.tx=io17,rx=io16
@@ -13,9 +15,9 @@ void setup()
     delay(10);
   }
 
-  // setup CAN
-  if (!CAN.begin(500E3))
-  { // start the CAN bus at 500 kbps
+  // start the CAN bus at 500 kbps
+  if (!CAN.begin(100E3))
+  {
     Serial.println("Starting CAN failed!");
     while (1)
       ;
@@ -25,7 +27,7 @@ void setup()
 
 void loop()
 {
-  int Uart2Data = 0, angle = 0, status = 0;                                           // AS5600 data.
+  int Uart2Data = 0, angle = 0, status = 0;                 // AS5600 data.
   byte statusByte = 0, angleHighByte = 0, angleLowByte = 0; // for CAN data.
 
   if (Serial2.available() > 0)
@@ -40,7 +42,7 @@ void loop()
     angleHighByte = highByte(angle);
     angleLowByte = lowByte(angle);
 
-    // Serial.println(Uart2Data);
+    // 各変数の状態チェック
     Serial.print("Uart2Data : ");
     Serial.println(Uart2Data);
     Serial.print("status: ");
@@ -53,12 +55,19 @@ void loop()
     Serial.println(angleHighByte);
     Serial.print("angleLowByte: ");
     Serial.println(angleLowByte);
+
+    // send CAN packet
+    Serial.println("Sending CAN packet ... ");
+    CAN.beginPacket(0x12);
+    CAN.write(status);
+    CAN.write(angleHighByte);
+    CAN.write(angleLowByte);
+    CAN.endPacket();
+    Serial.println("done");
+
+    //delay(100);
   }
-
   /*
-  Serial.println("Sending CAN packet ... ");
 
-  CAN.beginPacket(0x12);
-  CAN.write(status);
 */
 }
